@@ -1,0 +1,248 @@
+@extends('admin.layouts.app')
+@section('title', $title)
+@section('content')
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">{{ $title }}</h5>
+            </div>
+
+            <div class="card-body">
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger border-0 alert-dismissible fade show">
+                            {{ $error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endforeach
+                @endif
+
+                <form action="{{ $action }}" method="POST" id="menuItemForm">
+                    @method($method)
+                    @csrf
+
+                    <!-- Main Fields -->
+                    <div class="row mb-4">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('Menu') }} <span class="text-danger">*</span>:</label>
+                                <select name="menu_id" class="form-select @error('menu_id') is-invalid @enderror" required>
+                                    <option value="">{{ __('Select menu') }}</option>
+                                    @foreach($menus ?? [] as $menu)
+                                        <option value="{{ $menu->id }}" {{ old('menu_id', $item->menu_id ?? request('menu_id')) == $menu->id ? 'selected' : '' }}>
+                                            {{ $menu->translations->first()?->name ?? $menu->id }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('menu_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('Parent Item') }}:</label>
+                                <select name="parent_id" class="form-select @error('parent_id') is-invalid @enderror">
+                                    <option value="">{{ __('No parent (main item)') }}</option>
+                                    @foreach($parentItems ?? [] as $parentItem)
+                                        <option value="{{ $parentItem->id }}" {{ old('parent_id', $item->parent_id ?? '') == $parentItem->id ? 'selected' : '' }}>
+                                            {{ $parentItem->translations->first()?->title ?? $parentItem->id }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('parent_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('URL') }}:</label>
+                                <input type="url" name="url" class="form-control @error('url') is-invalid @enderror"
+                                       placeholder="{{ __('https://example.com') }}"
+                                       value="{{ old('url', $item->url ?? '') }}">
+                                @error('url')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('Target') }}:</label>
+                                <select name="target" class="form-select @error('target') is-invalid @enderror">
+                                    <option value="_self" {{ old('target', $item->target ?? '_self') == '_self' ? 'selected' : '' }}>{{ __('Same Window') }}</option>
+                                    <option value="_blank" {{ old('target', $item->target ?? '') == '_blank' ? 'selected' : '' }}>{{ __('New Window') }}</option>
+                                </select>
+                                @error('target')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('Order') }}:</label>
+                                <input type="number" name="order" class="form-control @error('order') is-invalid @enderror"
+                                       placeholder="{{ __('0') }}"
+                                       value="{{ old('order', $item->order ?? 0) }}">
+                                @error('order')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" name="status" value="1" class="form-check-input" 
+                                           {{ old('status', $item->status ?? true) ? 'checked' : '' }}>
+                                    <label class="form-check-label">{{ __('Active') }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Translation Fields -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">{{ __('Translations') }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach($languages as $language)
+                                    @php
+                                        $translation = isset($item) ? $item->translations->where('locale', $language->code)->first() : null;
+                                    @endphp
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="border rounded p-3">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="badge bg-primary me-2">{{ strtoupper($language->code) }}</span>
+                                                <span class="fw-semibold">{{ $language->name }}</span>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('Title') }} <span class="text-danger">*</span>:</label>
+                                                <input type="text" 
+                                                       name="translations[{{ $loop->index }}][title]" 
+                                                       class="form-control @error('translations.'.$loop->index.'.title') is-invalid @enderror"
+                                                       placeholder="{{ __('Menu item title') }}"
+                                                       value="{{ old('translations.'.$loop->index.'.title', $translation->title ?? '') }}"
+                                                       required>
+                                                @error('translations.'.$loop->index.'.title')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ __('Slug') }} <span class="text-danger">*</span>:</label>
+                                                <input type="text" 
+                                                       name="translations[{{ $loop->index }}][slug]" 
+                                                       class="form-control slug-input @error('translations.'.$loop->index.'.slug') is-invalid @enderror"
+                                                       placeholder="{{ __('Menu item slug') }}"
+                                                       value="{{ old('translations.'.$loop->index.'.slug', $translation->slug ?? '') }}"
+                                                       required>
+                                                @error('translations.'.$loop->index.'.slug')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
+
+                                            <input type="hidden" name="translations[{{ $loop->index }}][locale]" value="{{ $language->code }}">
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-light" onclick="history.back()">
+                            <i class="ph-arrow-left me-2"></i> {{ __('Back') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            {{ __('Save') }} <i class="ph-check ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Auto-generate slug from title
+            $('input[name*="[title]"]').on('input', function() {
+                var titleInput = $(this);
+                var slugInput = titleInput.closest('.border').find('input[name*="[slug]"]');
+                
+                if (slugInput.val() === '' || slugInput.data('auto-generated')) {
+                    var slug = generateSlug(titleInput.val());
+                    slugInput.val(slug).data('auto-generated', true);
+                }
+            });
+
+            // Mark slug as manually edited
+            $('input[name*="[slug]"]').on('input', function() {
+                $(this).data('auto-generated', false);
+            });
+
+            // Generate slug function
+            function generateSlug(text) {
+                return text
+                    .toLowerCase()
+                    .replace(/ə/g, 'e')
+                    .replace(/ı/g, 'i')
+                    .replace(/ö/g, 'o')
+                    .replace(/ü/g, 'u')
+                    .replace(/ç/g, 'c')
+                    .replace(/ş/g, 's')
+                    .replace(/ğ/g, 'g')
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim('-');
+            }
+
+            // Form validation
+            $('#menuItemForm').on('submit', function(e) {
+                var hasValidTranslation = false;
+                
+                $('input[name*="[title]"]').each(function() {
+                    if ($(this).val().trim() !== '') {
+                        hasValidTranslation = true;
+                        return false;
+                    }
+                });
+
+                if (!hasValidTranslation) {
+                    e.preventDefault();
+                    alert('{{ __("At least one language title is required") }}');
+                    $('input[name*="[title]"]').first().focus();
+                    return false;
+                }
+            });
+        });
+    </script>
+@endpush
