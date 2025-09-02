@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\NewsScope;
 use App\Traits\HasStatusHtml;
+use App\Traits\HasTranslatedAttributes;
 use App\Traits\Sortable;
 use Database\Factories\NewsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,9 +18,17 @@ use Spatie\Translatable\HasTranslations;
 class News extends Model
 {
     /** @use HasFactory<NewsFactory> */
-    use HasFactory, HasStatusHtml, SoftDeletes, Sortable, LogsActivity, HasTranslations;
+    use HasFactory, HasStatusHtml, HasTranslatedAttributes, SoftDeletes, Sortable, LogsActivity, HasTranslations;
 
     protected $guarded = [];
+
+    protected $with = ['translations'];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'published_at' => 'datetime',
+    ];
+
 
     /**
     /**
@@ -55,5 +64,13 @@ class News extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logAll()->logOnlyDirty();
+    }
+
+    /**
+     * Get the categories associated with the news.
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'news_categories');
     }
 }

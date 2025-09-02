@@ -14,10 +14,10 @@ class SliderTranslation extends Model
         'slider_id',
         'locale',
         'title',
-        'slug',
         'subtitle',
         'description',
         'button_text',
+        'button_link',
     ];
 
     /**

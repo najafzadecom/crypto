@@ -23,22 +23,21 @@ class SliderRequest extends FormRequest
     public function rules(): array
     {
         $sliderId = $this->route('slider');
-        
+
         return [
             // Main slider fields
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'button_url' => 'nullable|url|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.title' => 'required|string|max:255',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.subtitle' => 'nullable|string|max:255',
             'translations.*.description' => 'nullable|string|max:1000',
             'translations.*.button_text' => 'nullable|string|max:100',
+            'translations.*.button_link' => 'nullable|url|max:255',
         ];
     }
 
@@ -49,14 +48,13 @@ class SliderRequest extends FormRequest
     {
         return [
             'image' => 'şəkil',
-            'button_url' => 'düymə linki',
             'sort_order' => 'sıralama',
             'translations.*.locale' => 'dil',
             'translations.*.title' => 'başlıq',
-            'translations.*.slug' => 'slug',
             'translations.*.subtitle' => 'alt başlıq',
             'translations.*.description' => 'təsvir',
             'translations.*.button_text' => 'düymə mətni',
+            'translations.*.button_link' => 'düymə linki',
         ];
     }
 

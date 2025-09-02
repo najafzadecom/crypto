@@ -23,16 +23,15 @@ class FaqRequest extends FormRequest
     public function rules(): array
     {
         $faqId = $this->route('faq');
-        
+
         return [
             // Main faq fields
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.question' => 'required|string|max:500',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.answer' => 'required|string',
         ];
     }
@@ -45,7 +44,6 @@ class FaqRequest extends FormRequest
         return [
             'translations.*.locale' => 'dil',
             'translations.*.question' => 'sual',
-            'translations.*.slug' => 'slug',
             'translations.*.answer' => 'cavab',
         ];
     }
@@ -60,7 +58,6 @@ class FaqRequest extends FormRequest
             'translations.*.locale.required' => 'Dil sahəsi tələb olunur.',
             'translations.*.locale.in' => 'Dil yalnız az, en və ya tr ola bilər.',
             'translations.*.question.required' => 'Sual sahəsi tələb olunur.',
-            'translations.*.slug.required' => 'Slug sahəsi tələb olunur.',
             'translations.*.answer.required' => 'Cavab sahəsi tələb olunur.',
         ];
     }

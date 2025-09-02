@@ -23,7 +23,7 @@ class PackageRequest extends FormRequest
     public function rules(): array
     {
         $packageId = $this->route('package');
-        
+
         return [
             // Main package fields
             'price' => 'required|numeric|min:0',
@@ -31,12 +31,11 @@ class PackageRequest extends FormRequest
             'duration_days' => 'nullable|integer|min:1',
             'is_popular' => 'boolean',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.name' => 'required|string|max:255',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.description' => 'nullable|string|max:1000',
             'translations.*.features' => 'nullable|string',
         ];
@@ -54,7 +53,6 @@ class PackageRequest extends FormRequest
             'is_popular' => 'populyar',
             'translations.*.locale' => 'dil',
             'translations.*.name' => 'ad',
-            'translations.*.slug' => 'slug',
             'translations.*.description' => 'təsvir',
             'translations.*.features' => 'xüsusiyyətlər',
         ];
@@ -73,8 +71,7 @@ class PackageRequest extends FormRequest
             'translations.required' => 'Ən azı bir dil üçün tərcümə tələb olunur.',
             'translations.*.locale.required' => 'Dil sahəsi tələb olunur.',
             'translations.*.locale.in' => 'Dil yalnız az, en və ya tr ola bilər.',
-            'translations.*.name.required' => 'Ad sahəsi tələb olunur.',
-            'translations.*.slug.required' => 'Slug sahəsi tələb olunur.',
+            'translations.*.name.required' => 'Ad sahəsi tələb olunur.'
         ];
     }
 }

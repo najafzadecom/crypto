@@ -14,7 +14,6 @@ class StaticBlockTranslation extends Model
         'static_block_id',
         'locale',
         'title',
-        'slug',
         'content',
     ];
 

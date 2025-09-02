@@ -25,7 +25,7 @@ if (!function_exists('getOppositeDirection')) {
     /**
      * Get the opposite direction for toggling
      */
-    function getOppositeDirection(string $field, string $currentSort = null, string $currentDirection = null): string
+    function getOppositeDirection(string $field, ?string $currentSort = null, ?string $currentDirection = null): string
     {
         $currentSort = $currentSort ?? getCurrentSort();
         $currentDirection = $currentDirection ?? getSortDirection();
@@ -42,7 +42,7 @@ if (!function_exists('generateSortUrl')) {
     /**
      * Generate sort URL for a field
      */
-    function generateSortUrl(string $field, string $currentSort = null, string $currentDirection = null): string
+    function generateSortUrl(string $field, ?string $currentSort = null, ?string $currentDirection = null): string
     {
         $direction = getOppositeDirection($field, $currentSort, $currentDirection);
         $params = request()->query();
@@ -57,7 +57,7 @@ if (!function_exists('isCurrentSort')) {
     /**
      * Check if a field is currently being sorted
      */
-    function isCurrentSort(string $field, string $currentSort = null): bool
+    function isCurrentSort(string $field, ?string $currentSort = null): bool
     {
         $currentSort = $currentSort ?? getCurrentSort();
         return $currentSort === $field;
@@ -68,7 +68,7 @@ if (!function_exists('getSortIcon')) {
     /**
      * Get sort icon class for a field
      */
-    function getSortIcon(string $field, string $currentSort = null, string $currentDirection = null): string
+    function getSortIcon(string $field, ?string $currentSort = null, ?string $currentDirection = null): string
     {
         if (!isCurrentSort($field, $currentSort)) {
             return 'ph-arrows-down-up text-muted';
@@ -95,7 +95,7 @@ if (!function_exists('sortableTableHeader')) {
     /**
      * Generate sortable table header
      */
-    function sortableTableHeader(string $field, string $title, string $table = null): string
+    function sortableTableHeader(string $field, string $title, ?string $table = null): string
     {
         $sortableFields = [];
 

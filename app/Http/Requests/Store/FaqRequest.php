@@ -25,12 +25,11 @@ class FaqRequest extends FormRequest
         return [
             // Main faq fields
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.question' => 'required|string|max:500',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.answer' => 'required|string',
         ];
     }

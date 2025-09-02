@@ -21,6 +21,8 @@ class Slider extends Model
 
     protected $guarded = [];
 
+    protected $with = ['translations'];
+
     /**
      * Get the translations for the slider.
      */

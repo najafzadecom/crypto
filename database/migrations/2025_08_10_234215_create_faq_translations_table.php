@@ -16,12 +16,10 @@ return new class extends Migration
             $table->foreignId('faq_id')->constrained()->onDelete('cascade');
             $table->string('locale', 2)->index();
             $table->string('question');
-            $table->string('slug')->unique();
             $table->text('answer');
             $table->timestamps();
 
             $table->unique(['faq_id', 'locale']);
-            $table->unique(['faq_id', 'slug']);
         });
     }
 

@@ -6,7 +6,9 @@ namespace App\Providers;
 use App\Interfaces\PermissionInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\LanguageInterface;
+
 //Repositories
+use App\Models\Menu;
 use App\Repositories\PermissionRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
@@ -67,5 +69,24 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Paginator::useBootstrapFive();
+
+        $headerMenu = Menu::query()
+            ->with('menuItems')
+            ->where('status', true)
+            ->where('location', 'header')
+            ->first();
+
+
+        $footerMenu = Menu::query()
+            ->with('menuItems')
+            ->where('status', true)
+            ->where('location', 'footer')
+            ->first();
+
+        View()->share([
+            'headerMenu' => $headerMenu,
+            'footerMenu' => $footerMenu,
+            'site_name' => getSiteName()
+        ]);
     }
 }

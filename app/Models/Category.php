@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\CategoryScope;
 use App\Traits\HasStatusHtml;
+use App\Traits\HasTranslatedAttributes;
 use App\Traits\Sortable;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,9 +18,11 @@ use Spatie\Translatable\HasTranslations;
 class Category extends Model
 {
     /** @use HasFactory<CategoryFactory> */
-    use HasFactory, HasStatusHtml, SoftDeletes, Sortable, LogsActivity, HasTranslations;
+    use HasFactory, HasStatusHtml, HasTranslatedAttributes, SoftDeletes, Sortable, LogsActivity, HasTranslations;
 
     protected $guarded = [];
+
+    protected $with = ['translations'];
 
     /**
      * Get the translations for the category.
@@ -54,5 +57,13 @@ class Category extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logAll()->logOnlyDirty();
+    }
+
+    /**
+     * Get the news associated with the category.
+     */
+    public function news()
+    {
+        return $this->belongsToMany(News::class, 'news_categories');
     }
 }

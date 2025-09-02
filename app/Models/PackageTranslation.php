@@ -14,7 +14,6 @@ class PackageTranslation extends Model
         'package_id',
         'locale',
         'name',
-        'slug',
         'description',
         'features',
     ];

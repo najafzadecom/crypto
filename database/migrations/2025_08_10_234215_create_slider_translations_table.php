@@ -16,14 +16,13 @@ return new class extends Migration
             $table->foreignId('slider_id')->constrained()->onDelete('cascade');
             $table->string('locale', 2)->index();
             $table->string('title');
-            $table->string('slug')->unique();
             $table->text('subtitle')->nullable();
             $table->text('description')->nullable();
+            $table->string('button_link')->nullable();
             $table->string('button_text')->nullable();
             $table->timestamps();
 
             $table->unique(['slider_id', 'locale']);
-            $table->unique(['slider_id', 'slug']);
         });
     }
 

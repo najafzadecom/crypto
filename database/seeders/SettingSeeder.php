@@ -16,9 +16,9 @@ class SettingSeeder extends Seeder
             // General Settings
             [
                 'key' => 'site_name',
-                'name' => 'Site Adı',
-                'description' => 'CMS Panel Adı',
-                'value' => 'CMS Panel',
+                'name' => 'Origator.az',
+                'description' => 'Sayt adı',
+                'value' => 'Sayt adı',
                 'type' => 'text',
                 'group' => 'general'
             ],
@@ -136,6 +136,47 @@ class SettingSeeder extends Seeder
                 'type' => 'text',
                 'group' => 'system',
             ],
+            //Social Settings
+            [
+                'key' => 'social_facebook',
+                'name' => 'Facebook URL',
+                'description' => 'Facebook sosyal medya linki',
+                'value' => null,
+                'type' => 'url',
+                'group' => 'social'
+            ],
+            [
+                'key' => 'social_x',
+                'name' => 'X (Twitter) URL',
+                'description' => 'X (Twitter) sosyal medya linki',
+                'value' => null,
+                'type' => 'url',
+                'group' => 'social'
+            ],
+            [
+                'key' => 'social_instagram',
+                'name' => 'Instagram URL',
+                'description' => 'Instagram sosyal medya linki',
+                'value' => null,
+                'type' => 'url',
+                'group' => 'social'
+            ],
+            [
+                'key' => 'social_tiktok',
+                'name' => 'TikTok URL',
+                'description' => 'TikTok sosyal medya linki',
+                'value' => null,
+                'type' => 'url',
+                'group' => 'social'
+            ],
+            [
+                'key' => 'social_youtube',
+                'name' => 'YouTube URL',
+                'description' => 'YouTube sosyal medya linki',
+                'value' => null,
+                'type' => 'url',
+                'group' => 'social'
+            ]
         ];
 
         foreach ($settings as $setting) {

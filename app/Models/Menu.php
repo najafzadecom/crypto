@@ -21,13 +21,7 @@ class Menu extends Model
 
     protected $guarded = [];
 
-    /**
-     * Get the translations for the menu.
-     */
-    public function translations(): HasMany
-    {
-        return $this->hasMany(MenuTranslation::class);
-    }
+    protected $with = ['menu_items'];
 
     /**
      * Get the menu items for the menu.
@@ -35,14 +29,6 @@ class Menu extends Model
     public function menuItems(): HasMany
     {
         return $this->hasMany(MenuItem::class);
-    }
-
-    /**
-     * Get the translation model for Spatie Translatable.
-     */
-    public function getTranslationModelName(): string
-    {
-        return MenuTranslation::class;
     }
 
     /**

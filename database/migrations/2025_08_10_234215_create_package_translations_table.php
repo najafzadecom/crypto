@@ -16,13 +16,11 @@ return new class extends Migration
             $table->foreignId('package_id')->constrained()->onDelete('cascade');
             $table->string('locale', 2)->index();
             $table->string('name');
-            $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->longText('features')->nullable();
             $table->timestamps();
 
             $table->unique(['package_id', 'locale']);
-            $table->unique(['package_id', 'slug']);
         });
     }
 

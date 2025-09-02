@@ -6,6 +6,7 @@ use App\Http\Requests\Store\NewsRequest as StoreRequest;
 use App\Http\Requests\Update\NewsRequest as UpdateRequest;
 use App\Services\NewsService as Service;
 use App\Services\LanguageService;
+use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
@@ -13,8 +14,9 @@ class NewsController extends BaseController
 {
     private Service $service;
     private LanguageService $languageService;
+    private CategoryService $categoryService;
 
-    public function __construct(Service $service, LanguageService $languageService)
+    public function __construct(Service $service, LanguageService $languageService, CategoryService $categoryService)
     {
         $this->middleware('permission:news-index|news-create|news-edit', ['only' => ['index']]);
         $this->middleware('permission:news-create', ['only' => ['create', 'store']]);
@@ -23,6 +25,7 @@ class NewsController extends BaseController
 
         $this->service = $service;
         $this->languageService = $languageService;
+        $this->categoryService = $categoryService;
         $this->module = 'news';
     }
 
@@ -44,7 +47,8 @@ class NewsController extends BaseController
             'title' => __('Create News'),
             'method' => 'POST',
             'action' => route('admin.' . $this->module . '.store'),
-            'languages' => $this->languageService->getActiveLanguages()
+            'languages' => $this->languageService->getActiveLanguages(),
+            'categories' => $this->categoryService->getAll('id', 'ASC')
         ];
 
         return $this->render('form');
@@ -83,7 +87,8 @@ class NewsController extends BaseController
             'item' => $item,
             'method' => 'PUT',
             'action' => route('admin.' . $this->module . '.update', $id),
-            'languages' => $this->languageService->getActiveLanguages()
+            'languages' => $this->languageService->getActiveLanguages(),
+            'categories' => $this->categoryService->getAll('id', 'ASC')
         ];
 
         return $this->render('form');

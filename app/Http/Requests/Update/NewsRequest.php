@@ -30,6 +30,8 @@ class NewsRequest extends FormRequest
             'is_featured' => 'boolean',
             'published_at' => 'nullable|date',
             'status' => 'boolean',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
             
             // Translation fields
             'translations' => 'required|array',

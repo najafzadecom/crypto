@@ -23,19 +23,18 @@ class TestimonialRequest extends FormRequest
     public function rules(): array
     {
         $testimonialId = $this->route('testimonial');
-        
+
         return [
             // Main testimonial fields
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'company' => 'nullable|string|max:255',
             'rating' => 'required|integer|min:1|max:5',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.name' => 'required|string|max:255',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.position' => 'nullable|string|max:255',
             'translations.*.comment' => 'required|string',
         ];
@@ -52,7 +51,6 @@ class TestimonialRequest extends FormRequest
             'rating' => 'reytinq',
             'translations.*.locale' => 'dil',
             'translations.*.name' => 'ad',
-            'translations.*.slug' => 'slug',
             'translations.*.position' => 'vəzifə',
             'translations.*.comment' => 'şərh',
         ];
@@ -71,7 +69,6 @@ class TestimonialRequest extends FormRequest
             'translations.*.locale.required' => 'Dil sahəsi tələb olunur.',
             'translations.*.locale.in' => 'Dil yalnız az, en və ya tr ola bilər.',
             'translations.*.name.required' => 'Ad sahəsi tələb olunur.',
-            'translations.*.slug.required' => 'Slug sahəsi tələb olunur.',
             'translations.*.comment.required' => 'Şərh sahəsi tələb olunur.',
         ];
     }

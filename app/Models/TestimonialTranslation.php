@@ -14,7 +14,6 @@ class TestimonialTranslation extends Model
         'testimonial_id',
         'locale',
         'name',
-        'slug',
         'position',
         'comment',
     ];

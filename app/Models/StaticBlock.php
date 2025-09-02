@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\StaticBlockScope;
 use App\Traits\HasStatusHtml;
+use App\Traits\HasTranslatedAttributes;
 use App\Traits\Sortable;
 use Database\Factories\StaticBlockFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,9 +18,11 @@ use Spatie\Translatable\HasTranslations;
 class StaticBlock extends Model
 {
     /** @use HasFactory<StaticBlockFactory> */
-    use HasFactory, HasStatusHtml, SoftDeletes, Sortable, LogsActivity, HasTranslations;
+    use HasFactory, HasStatusHtml, HasTranslatedAttributes, SoftDeletes, Sortable, LogsActivity, HasTranslations;
 
     protected $guarded = [];
+
+    protected $with = ['translations'];
 
     /**
      * Get the translations for the static block.

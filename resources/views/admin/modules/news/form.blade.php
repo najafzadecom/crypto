@@ -57,6 +57,27 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label">{{ __('Categories') }}:</label>
+                                <select name="category_ids[]" class="form-select select2 @error('category_ids') is-invalid @enderror" multiple data-placeholder="{{ __('Select categories') }}">
+                                    @foreach($categories as $category)
+                                        @php
+                                            $selectedCategories = old('category_ids', isset($item) ? $item->categories->pluck('id')->toArray() : []);
+                                        @endphp
+                                        <option value="{{ $category->id }}" 
+                                                {{ in_array($category->id, $selectedCategories) ? 'selected' : '' }}>
+                                            {{ $category->getTranslatedName() }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text">{{ __('Select categories for this news') }}</div>
+                                @error('category_ids')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <div class="form-check">
                                     <input type="checkbox" name="is_featured" value="1" class="form-check-input" 
                                            {{ old('is_featured', $item->is_featured ?? false) ? 'checked' : '' }}>
@@ -177,6 +198,16 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            // Initialize Select2 for categories
+            $('.select2').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: function() {
+                    return $(this).data('placeholder');
+                },
+                allowClear: true
+            });
+
             // Auto-generate slug from title
             $('input[name*="[title]"]').on('input', function() {
                 var titleInput = $(this);

@@ -16,13 +16,11 @@ return new class extends Migration
             $table->foreignId('testimonial_id')->constrained()->onDelete('cascade');
             $table->string('locale', 2)->index();
             $table->string('name');
-            $table->string('slug')->unique();
             $table->string('position')->nullable();
             $table->text('comment');
             $table->timestamps();
 
             $table->unique(['testimonial_id', 'locale']);
-            $table->unique(['testimonial_id', 'slug']);
         });
     }
 

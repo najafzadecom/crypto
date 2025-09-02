@@ -26,12 +26,6 @@ class MenuRequest extends FormRequest
             // Main menu fields
             'location' => 'required|string|max:255|unique:menus,location',
             'status' => 'boolean',
-            
-            // Translation fields
-            'translations' => 'required|array|min:1',
-            'translations.*.locale' => 'required|string|in:az,en,tr',
-            'translations.*.name' => 'required|string|max:255',
-            'translations.*.slug' => 'required|string|max:255',
         ];
     }
 
@@ -41,10 +35,7 @@ class MenuRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'location' => 'yerləşim',
-            'translations.*.locale' => 'dil',
-            'translations.*.name' => 'ad',
-            'translations.*.slug' => 'slug',
+            'location' => 'yerləşim'
         ];
     }
 
@@ -55,12 +46,7 @@ class MenuRequest extends FormRequest
     {
         return [
             'location.required' => 'Yerləşim sahəsi tələb olunur.',
-            'location.unique' => 'Bu yerləşim artıq mövcuddur.',
-            'translations.required' => 'Ən azı bir dil üçün tərcümə tələb olunur.',
-            'translations.*.locale.required' => 'Dil sahəsi tələb olunur.',
-            'translations.*.locale.in' => 'Dil yalnız az, en və ya tr ola bilər.',
-            'translations.*.name.required' => 'Ad sahəsi tələb olunur.',
-            'translations.*.slug.required' => 'Slug sahəsi tələb olunur.',
+            'location.unique' => 'Bu yerləşim artıq mövcuddur.'
         ];
     }
 }

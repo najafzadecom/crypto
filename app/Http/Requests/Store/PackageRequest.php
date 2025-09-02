@@ -29,12 +29,11 @@ class PackageRequest extends FormRequest
             'duration_days' => 'nullable|integer|min:1',
             'is_popular' => 'boolean',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.name' => 'required|string|max:255',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.description' => 'nullable|string|max:1000',
             'translations.*.features' => 'nullable|string',
         ];
@@ -52,7 +51,6 @@ class PackageRequest extends FormRequest
             'is_popular' => 'populyar',
             'translations.*.locale' => 'dil',
             'translations.*.name' => 'ad',
-            'translations.*.slug' => 'slug',
             'translations.*.description' => 'təsvir',
             'translations.*.features' => 'xüsusiyyətlər',
         ];

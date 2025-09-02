@@ -22,6 +22,8 @@ class MenuItem extends Model
 
     protected $guarded = [];
 
+    protected $with = ['translations'];
+
     /**
      * Get the translations for the menu item.
      */

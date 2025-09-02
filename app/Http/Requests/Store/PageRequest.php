@@ -24,9 +24,8 @@ class PageRequest extends FormRequest
     {
         return [
             // Main page fields
-            'template' => 'required|string|max:255',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
@@ -44,7 +43,6 @@ class PageRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'template' => 'şablon',
             'translations.*.locale' => 'dil',
             'translations.*.title' => 'başlıq',
             'translations.*.slug' => 'slug',
@@ -60,7 +58,6 @@ class PageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'template.required' => 'Şablon sahəsi tələb olunur.',
             'translations.required' => 'Ən azı bir dil üçün tərcümə tələb olunur.',
             'translations.*.locale.required' => 'Dil sahəsi tələb olunur.',
             'translations.*.locale.in' => 'Dil yalnız az, en və ya tr ola bilər.',

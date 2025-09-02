@@ -25,12 +25,11 @@ class StaticBlockRequest extends FormRequest
         return [
             // Main static block fields
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',
             'translations.*.title' => 'required|string|max:255',
-            'translations.*.slug' => 'required|string|max:255',
             'translations.*.content' => 'required|string',
         ];
     }
@@ -43,7 +42,6 @@ class StaticBlockRequest extends FormRequest
         return [
             'translations.*.locale' => 'dil',
             'translations.*.title' => 'başlıq',
-            'translations.*.slug' => 'slug',
             'translations.*.content' => 'məzmun',
         ];
     }
@@ -58,7 +56,6 @@ class StaticBlockRequest extends FormRequest
             'translations.*.locale.required' => 'Dil sahəsi tələb olunur.',
             'translations.*.locale.in' => 'Dil yalnız az, en və ya tr ola bilər.',
             'translations.*.title.required' => 'Başlıq sahəsi tələb olunur.',
-            'translations.*.slug.required' => 'Slug sahəsi tələb olunur.',
             'translations.*.content.required' => 'Məzmun sahəsi tələb olunur.',
         ];
     }

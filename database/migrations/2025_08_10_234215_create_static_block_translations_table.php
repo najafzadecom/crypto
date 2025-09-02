@@ -16,12 +16,10 @@ return new class extends Migration
             $table->foreignId('static_block_id')->constrained()->onDelete('cascade');
             $table->string('locale', 2)->index();
             $table->string('title');
-            $table->string('slug')->unique();
             $table->longText('content');
             $table->timestamps();
 
             $table->unique(['static_block_id', 'locale']);
-            $table->unique(['static_block_id', 'slug']);
         });
     }
 

@@ -14,7 +14,6 @@ class FaqTranslation extends Model
         'faq_id',
         'locale',
         'question',
-        'slug',
         'answer',
     ];
 

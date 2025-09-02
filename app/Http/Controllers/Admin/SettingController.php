@@ -92,6 +92,7 @@ class SettingController extends BaseController
             'api' => __('API'),
             'notification' => __('Notification'),
             'system' => __('System'),
+            'social' => __('Social'),
         ];
     }
 

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('order_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('user_id');
+            $table->foreignId('order_id')->nullable();
             $table->string('transaction_id')->unique();
             $table->string('payment_gateway'); // stripe, paypal, bank_transfer, crypto, etc.
             $table->string('gateway_transaction_id')->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index(['user_id', 'status']);
             $table->index(['order_id']);
             $table->index(['transaction_id']);
