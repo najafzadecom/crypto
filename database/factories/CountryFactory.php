@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Order;
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Order>
+ * @extends Factory<Country>
  */
-class OrderFactory extends Factory
+class CountryFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\Core\Services\BaseService;
-use App\Repositories\RoleRepository as Repository;
 use App\Models\Permission;
+use App\Repositories\RoleRepository as Repository;
+use Illuminate\Database\Eloquent\Collection;
 
 class RoleService extends BaseService
 {
-    public function __construct(protected Repository $repository) {}
+    public function __construct(protected Repository $repository)
+    {
+    }
 
     public function create(array $data): object
     {
@@ -16,9 +19,9 @@ class RoleService extends BaseService
         unset($data['permissions']);
 
         $role = $this->repository->create($data);
-        
+
         if (!empty($permissionIds)) {
-            $permissions = Permission::whereIn('id', $permissionIds)->get();
+            $permissions = Permission::query()->whereIn('id', $permissionIds)->get();
             $role->syncPermissions($permissions);
         }
 
@@ -31,20 +34,27 @@ class RoleService extends BaseService
         unset($data['permissions']);
 
         $role = $this->repository->update($id, $data);
-        
+
         if ($role && !empty($permissionIds)) {
-            $permissions = Permission::whereIn('id', $permissionIds)->get();
+            $permissions = Permission::query()->whereIn('id', $permissionIds)->get();
             $role->syncPermissions($permissions);
         } elseif ($role) {
-            // Əgər permission-lar boşdursa, bütün permission-ları sil
             $role->syncPermissions([]);
         }
 
         return $role;
     }
 
-    public function getAllPermissions()
+    public function getAllPermissions(): Collection
     {
         return Permission::all();
+    }
+
+    public function getActives(): Collection
+    {
+        return $this->repository->getModel()
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
     }
 }
