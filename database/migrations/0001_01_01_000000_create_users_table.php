@@ -13,12 +13,35 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('father_name')->nullable();
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('telegram')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->date('birth_date')->nullable();
+            $table->string('birth_place')->nullable();
+            $table->foreignId('birth_country_id')->nullable()->constrained('countries')->nullOnDelete();
+            $table->foreignId('birth_region_id')->nullable()->constrained('regions')->nullOnDelete();
+
+            $table->foreignId('residence_country_id')->nullable()->constrained('countries')->nullOnDelete();
+            $table->foreignId('residence_region_id')->nullable()->constrained('regions')->nullOnDelete();
+            $table->string('residence_address')->nullable();
+
+            $table->string('education')->nullable();
+            $table->string('job')->nullable();
+            $table->string('position')->nullable();
+
+            $table->string('twitter')->nullable();
+            $table->string('wallet_address')->nullable();
+            $table->text('bio')->nullable();
+
+            $table->timestamp('profile_blocked_until')->nullable();
+            $table->timestamp('last_profile_update')->nullable();
+
             $table->rememberToken();
             $table->boolean('status')->default(0);
             $table->timestamps();

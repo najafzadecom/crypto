@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\BalanceController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\CurrencyController;
@@ -69,6 +70,31 @@ Route::middleware('auth')
         Route::resource('regions', RegionController::class);
         Route::resource('orders', OrderController::class);
         Route::resource('transactions', TransactionController::class);
+        
+        // Balance Management
+        Route::prefix('balances')->as('balances.')->group(function () {
+            Route::get('/', [BalanceController::class, 'index'])->name('index');
+            Route::get('/transactions', [BalanceController::class, 'transactions'])->name('transactions');
+            Route::get('/pending-deposits', [BalanceController::class, 'pendingDeposits'])->name('pending-deposits');
+            Route::post('/deposits/{id}/approve', [BalanceController::class, 'approveDeposit'])->name('deposits.approve');
+            Route::post('/deposits/{id}/reject', [BalanceController::class, 'rejectDeposit'])->name('deposits.reject');
+            Route::get('/users/{user}/adjust', [BalanceController::class, 'showAdjustmentForm'])->name('users.adjust');
+            Route::post('/users/{user}/adjust', [BalanceController::class, 'adjustBalance'])->name('users.adjust.store');
+            
+            // Deposit Methods
+            Route::get('/deposit-methods', [BalanceController::class, 'depositMethods'])->name('deposit-methods');
+            Route::get('/deposit-methods/create', [BalanceController::class, 'createDepositMethod'])->name('deposit-methods.create');
+            Route::post('/deposit-methods', [BalanceController::class, 'storeDepositMethod'])->name('deposit-methods.store');
+            Route::get('/deposit-methods/{method}/edit', [BalanceController::class, 'editDepositMethod'])->name('deposit-methods.edit');
+            Route::put('/deposit-methods/{method}', [BalanceController::class, 'updateDepositMethod'])->name('deposit-methods.update');
+            
+            // Transfer Settings
+            Route::get('/transfer-settings', [BalanceController::class, 'transferSettings'])->name('transfer-settings');
+            Route::get('/transfer-settings/create', [BalanceController::class, 'createTransferSetting'])->name('transfer-settings.create');
+            Route::post('/transfer-settings', [BalanceController::class, 'storeTransferSetting'])->name('transfer-settings.store');
+            Route::get('/transfer-settings/{setting}/edit', [BalanceController::class, 'editTransferSetting'])->name('transfer-settings.edit');
+            Route::put('/transfer-settings/{setting}', [BalanceController::class, 'updateTransferSetting'])->name('transfer-settings.update');
+        });
 
         // System
         Route::resource('activity-logs', ActivityLogController::class)->only(['index', 'show']);
