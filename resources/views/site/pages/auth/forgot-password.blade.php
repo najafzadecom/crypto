@@ -4,7 +4,7 @@
         <main class="nk-pages nk-pages-centered bg-theme">
             <div class="ath-container">
                 <div class="ath-header text-center">
-                    <a href="{{ route('home') }}" class="ath-logo">
+                    <a href="{{ localizedRoute('home') }}" class="ath-logo">
                         <img
                             src="{{ asset('site/assets/images/logo-full-white.png') }}"
                             srcset="{{ asset('site/assets/images/logo-full-white2x.png') }} 2x"
@@ -17,7 +17,7 @@
                         {{ __('Reset') }}
                         <small class="tc-default">{{ __('with your Email') }}</small>
                     </h5>
-                    <form action="{{ route('password.email') }}" method="POST">
+                    <form action="{{ localizedRoute('password.email') }}" method="POST">
                         @csrf
                         <div class="field-item">
                             <div class="field-wrap">
@@ -28,7 +28,7 @@
                     </form>
                 </div>
                 <div class="ath-note text-center tc-light">
-                    {{ __('Remembered?') }} <a href="{{ route('login') }}"> <strong>{{ __('Sign in here') }}</strong></a>
+                    {{ __('Remembered?') }} <a href="{{ localizedRoute('login') }}"> <strong>{{ __('Sign in here') }}</strong></a>
                 </div>
             </div>
         </main>

@@ -8,6 +8,7 @@ use App\Services\PackageService as Service;
 use App\Services\LanguageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class PackageController extends BaseController
 {
@@ -16,17 +17,17 @@ class PackageController extends BaseController
 
     public function __construct(Service $service, LanguageService $languageService)
     {
-        $this->middleware('permission:packages-index|packages-create|packages-edit', ['only' => ['index']]);
-        $this->middleware('permission:packages-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:packages-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:packages-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:package-index|package-create|package-edit', ['only' => ['index']]);
+        $this->middleware('permission:package-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:package-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:package-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->languageService = $languageService;
         $this->module = 'packages';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Packages'),
@@ -38,7 +39,7 @@ class PackageController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create Package'),
@@ -50,17 +51,17 @@ class PackageController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.packages.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'price' => $item->price,
@@ -75,10 +76,10 @@ class PackageController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit Package'),
             'item' => $item,
@@ -105,7 +106,7 @@ class PackageController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

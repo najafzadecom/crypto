@@ -12,7 +12,7 @@ class MenuItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->can('menu-item-edit');
     }
 
     /**
@@ -23,7 +23,7 @@ class MenuItemRequest extends FormRequest
     public function rules(): array
     {
         $menuItemId = $this->route('menu_item');
-        
+
         return [
             // Main menu item fields
             'menu_id' => 'required|exists:menus,id',
@@ -33,7 +33,7 @@ class MenuItemRequest extends FormRequest
             'icon' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',

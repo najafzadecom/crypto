@@ -8,6 +8,7 @@ use App\Services\StaticBlockService as Service;
 use App\Services\LanguageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class StaticBlockController extends BaseController
 {
@@ -16,17 +17,17 @@ class StaticBlockController extends BaseController
 
     public function __construct(Service $service, LanguageService $languageService)
     {
-        $this->middleware('permission:static-blocks-index|static-blocks-create|static-blocks-edit', ['only' => ['index']]);
-        $this->middleware('permission:static-blocks-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:static-blocks-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:static-blocks-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:static-block-index|static-block-create|static-block-edit', ['only' => ['index']]);
+        $this->middleware('permission:static-block-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:static-block-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:static-block-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->languageService = $languageService;
         $this->module = 'static-blocks';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Static Blocks'),
@@ -38,7 +39,7 @@ class StaticBlockController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create Static Block'),
@@ -50,17 +51,17 @@ class StaticBlockController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.static-blocks.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'key' => $item->key,
@@ -74,10 +75,10 @@ class StaticBlockController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit Static Block'),
             'item' => $item,
@@ -104,7 +105,7 @@ class StaticBlockController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

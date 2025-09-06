@@ -10,20 +10,15 @@ use Illuminate\Support\Facades\Hash;
 
 class   UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $user = User::query()->create([
             'username' => 'admin',
-            'name' => 'Kamran Najafzade',
-            'email' => 'nadjafzadeh@gmail.com',
+            'name' => 'John Doe',
+            'email' => 'admin@orig.com',
             'password' => Hash::make('12345678')
         ]);
 
         $user->syncRoles('Super Admin');
-
-        //User::factory()->count(10)->create();
     }
 }

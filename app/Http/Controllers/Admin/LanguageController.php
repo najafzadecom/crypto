@@ -7,6 +7,7 @@ use App\Http\Requests\Update\LanguageRequest as UpdateRequest;
 use App\Services\LanguageService as Service;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class LanguageController extends BaseController
 {
@@ -14,16 +15,16 @@ class LanguageController extends BaseController
 
     public function __construct(Service $service)
     {
-        $this->middleware('permission:languages-index|languages-create|languages-edit', ['only' => ['index']]);
-        $this->middleware('permission:languages-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:languages-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:languages-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:language-index|language-create|language-edit', ['only' => ['index']]);
+        $this->middleware('permission:language-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:language-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:language-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->module = 'languages';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Languages'),
@@ -34,26 +35,29 @@ class LanguageController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
+        $flagIcons = $this->getFlagIcons();
+
         $this->data = [
             'title' => __('Create'),
             'module' => __('Languages'),
             'method' => 'POST',
-            'action' => route('admin.' . $this->module . '.store')
+            'action' => route('admin.' . $this->module . '.store'),
+            'flagIcons' => $flagIcons
         ];
 
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.languages.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $this->data = [
             'item' => $this->service->getById($id)
@@ -62,16 +66,18 @@ class LanguageController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+        $flagIcons = $this->getFlagIcons();
+
         $this->data = [
             'title' => __('Edit'),
             'module' => __('Languages'),
             'item' => $item,
             'method' => 'PUT',
-            'action' => route('admin.' . $this->module . '.update', $id)
+            'action' => route('admin.' . $this->module . '.update', $id),
+            'flagIcons' => $flagIcons
         ];
 
         return $this->render('form');
@@ -92,7 +98,7 @@ class LanguageController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 
@@ -143,5 +149,29 @@ class LanguageController extends BaseController
         ];
 
         return $this->json($code);
+    }
+
+    /**
+     * Get all flag icons from the lang directory
+     *
+     * @return array
+     */
+    private function getFlagIcons(): array
+    {
+        $flagPath = public_path('admin/assets/images/lang');
+        $flags = [];
+
+        if (file_exists($flagPath) && is_dir($flagPath)) {
+            $files = scandir($flagPath);
+
+            foreach ($files as $file) {
+                if ($file !== '.' && $file !== '..' && pathinfo($file, PATHINFO_EXTENSION) === 'svg') {
+                    $countryName = pathinfo($file, PATHINFO_FILENAME);
+                    $flags[$file] = ucfirst($countryName);
+                }
+            }
+        }
+
+        return $flags;
     }
 }

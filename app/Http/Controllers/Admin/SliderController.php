@@ -8,6 +8,7 @@ use App\Services\SliderService as Service;
 use App\Services\LanguageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class SliderController extends BaseController
 {
@@ -16,17 +17,17 @@ class SliderController extends BaseController
 
     public function __construct(Service $service, LanguageService $languageService)
     {
-        $this->middleware('permission:sliders-index|sliders-create|sliders-edit', ['only' => ['index']]);
-        $this->middleware('permission:sliders-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:sliders-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:sliders-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:slider-index|slider-create|slider-edit', ['only' => ['index']]);
+        $this->middleware('permission:slider-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:slider-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:slider-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->languageService = $languageService;
         $this->module = 'sliders';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Sliders'),
@@ -38,7 +39,7 @@ class SliderController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create Slider'),
@@ -50,17 +51,17 @@ class SliderController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.sliders.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'image' => $item->image,
@@ -75,10 +76,10 @@ class SliderController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit Slider'),
             'item' => $item,
@@ -105,7 +106,7 @@ class SliderController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

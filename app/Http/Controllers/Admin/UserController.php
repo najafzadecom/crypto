@@ -3,48 +3,51 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Store\UserRequest as StoreRequest;
+use App\Http\Requests\Update\ProfileRequest;
 use App\Http\Requests\Update\UserRequest as UpdateRequest;
 use App\Services\RoleService;
 use App\Services\UserService as Service;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Cache;
 
 class UserController extends BaseController
 {
     private Service $service;
+
     private RoleService $roleService;
 
     public function __construct(
         Service     $service,
         RoleService $roleService
-    )
-    {
-        $this->middleware('permission:users-index|users-create|users-edit', ['only' => ['index']]);
-        $this->middleware('permission:users-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:users-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:users-delete', ['only' => ['destroy']]);
+    ) {
+        $this->middleware('permission:user-index|user-create|user-edit', ['only' => ['index']]);
+        $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:user-profile', ['only' => ['profile', 'profileUpdate']]);
 
         $this->service = $service;
         $this->roleService = $roleService;
         $this->module = 'users';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Users'),
             'title' => __('List'),
-            'items' => $this->service->paginate()
+            'items' => $this->service->paginate(),
         ];
 
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $roles = Cache::rememberForever('roles', function () {
-            return $this->roleService->getAll();
+            return $this->roleService->getActives();
         });
 
         $this->data = [
@@ -52,44 +55,71 @@ class UserController extends BaseController
             'module' => __('Users'),
             'method' => 'POST',
             'roles' => $roles,
-            'action' => route('admin.' . $this->module . '.store')
+            'action' => route('admin.' . $this->module . '.store'),
+            'permissions' => $this->roleService->getAllPermissions(),
         ];
 
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.users.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $this->data = [
-            'item' => $this->service->getById($id)
+            'item' => $this->service->getById($id),
         ];
 
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $roles = Cache::rememberForever('roles', function () {
-            return $this->roleService->getAll();
+            return $this->roleService->getActives();
         });
+
+        $item = $this->service->getById($id);
 
         $this->data = [
             'title' => __('Update'),
             'module' => __('Users'),
-            'item' => $this->service->getById($id),
+            'item' => $item,
             'method' => 'PUT',
             'roles' => $roles,
-            'action' => route('admin.' . $this->module . '.update', $id)
+            'action' => route('admin.' . $this->module . '.update', $id),
+            'permissions' => $this->roleService->getAllPermissions(),
+            'rolePermissions' => $item ? $item->permissions->pluck('id')->toArray() : [],
         ];
 
         return $this->render('form');
+    }
+
+    public function profile(): View
+    {
+        $item = $this->service->getById(auth()->id());
+
+        $this->data = [
+            'title' => $item->name,
+            'module' => __('Users'),
+            'item' => $item,
+            'method' => 'PUT',
+            'action' => route('admin.' . $this->module . '.profile'),
+        ];
+
+        return $this->render('profile');
+    }
+
+    public function updateProfile(ProfileRequest $request): RedirectResponse
+    {
+        $this->service->update(auth()->id(), $request->validated());
+
+        return $this->redirectSuccessBack();
     }
 
     public function update(UpdateRequest $request, string $id): RedirectResponse
@@ -105,9 +135,9 @@ class UserController extends BaseController
         if (!request()->has('confirmed')) {
             $this->data = [
                 'message' => __('Delete confirmation required'),
-                'confirmed' => false
+                'confirmed' => false,
             ];
-            
+
             return $this->json(422);
         }
 
@@ -120,7 +150,7 @@ class UserController extends BaseController
         }
 
         $this->data = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return $this->json($code);
@@ -137,7 +167,7 @@ class UserController extends BaseController
         }
 
         $this->data = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return $this->json($code);
@@ -154,7 +184,7 @@ class UserController extends BaseController
         }
 
         $this->data = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return $this->json($code);

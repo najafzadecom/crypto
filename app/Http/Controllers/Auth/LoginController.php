@@ -27,7 +27,7 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
-        $this->redirectTo = route('profile');
+        $this->redirectTo = localizedRoute('profile');
     }
 
     public function showLoginForm()

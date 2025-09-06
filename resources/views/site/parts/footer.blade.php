@@ -90,7 +90,7 @@
         <div class="container">
             <div class="row justify-content-md-between align-items-center">
                 <div class="col-lg-6 col-md-3 col-sm-4">
-                    <a href="{{ route('home') }}" class="wgs-logo-s2 d-inline-block mb-2 mb-md-0">
+                    <a href="{{ localizedRoute('home') }}" class="wgs-logo-s2 d-inline-block mb-2 mb-md-0">
                         <img
                             src="{{ asset('site/assets/images/logo-full-white.png') }}"
                             srcset="{{ asset('site/assets/images/logo-full-white2x.png') }} 2x"
@@ -101,9 +101,9 @@
                 <div class="col-lg-6 col-md-8">
                     <div class="copyright-text">
                         <ul class="d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
-                            <li><a href="#">{{ __('Term of Conditions') }}</a></li>
-                            <li><a href="#">{{ __('Privacy Policy') }}</a></li>
-                            <li><a href="#">{{ __('Cookie Policy') }}</a></li>
+                            <li><a href="{{ localizedRoute('page.show', ['page' => 'terms']) }}">{{ __('Term of Conditions') }}</a></li>
+                            <li><a href="{{ localizedRoute('page.show', ['page' => 'privacy']) }}">{{ __('Privacy Policy') }}</a></li>
+                            <li><a href="{{ localizedRoute('page.show', ['page' => 'cookie']) }}">{{ __('Cookie Policy') }}</a></li>
                             <li>
                                 <p>&copy;{{ date('Y') }} - {{ $site_name }}</p>
                             </li>

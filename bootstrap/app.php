@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use App\Http\Middleware\CheckApiToken;
 use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\CheckBlacklist;
+use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\ProtectSystemRoles;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -29,9 +29,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
-            'check_api_token' => CheckApiToken::class,
             'auth' => Authenticate::class,
-            'check_blacklist' => CheckBlacklist::class,
+            'setlocale' => SetLocale::class,
+            'protect_system_roles' => ProtectSystemRoles::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\LanguageController;
@@ -12,6 +14,8 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
@@ -40,7 +44,7 @@ Route::middleware('auth')
 
         // Access Control
         Route::resource('users', UserController::class);
-        Route::resource('roles', RoleController::class);
+        Route::resource('roles', RoleController::class)->middleware(['protect_system_roles']);
         Route::resource('permissions', PermissionController::class);
 
         // Content Management
@@ -59,6 +63,10 @@ Route::middleware('auth')
 
         // Business Management
         Route::resource('packages', PackageController::class);
+        Route::resource('partners', PartnerController::class);
+        Route::resource('currencies', CurrencyController::class);
+        Route::resource('countries', CountryController::class);
+        Route::resource('regions', RegionController::class);
         Route::resource('orders', OrderController::class);
         Route::resource('transactions', TransactionController::class);
 

@@ -174,7 +174,7 @@
                     @endcan
                 @endcanany
 
-                @canany(['packages-index', 'orders-index', 'transactions-index'])
+                @canany(['packages-index', 'partner-index', 'currency-index', 'country-index', 'region-index', 'orders-index', 'transactions-index'])
                     <!-- Business Management -->
                     <li class="nav-item-header">
                         <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">{{ __('Business Management') }}</div>
@@ -186,6 +186,42 @@
                                class="nav-link @if(request()->routeIs('admin.packages.*')) active @endif">
                                 <i class="ph-package"></i>
                                 <span>{{ __('Packages') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('partner-index')
+                        <li class="nav-item">
+                            <a href="{{ route('admin.partners.index') }}"
+                               class="nav-link @if(request()->routeIs('admin.partners.*')) active @endif">
+                                <i class="ph-buildings"></i>
+                                <span>{{ __('Partners') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('currency-index')
+                        <li class="nav-item">
+                            <a href="{{ route('admin.currencies.index') }}"
+                               class="nav-link @if(request()->routeIs('admin.currencies.*')) active @endif">
+                                <i class="ph-currency-circle-dollar"></i>
+                                <span>{{ __('Currencies') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('country-index')
+                        <li class="nav-item">
+                            <a href="{{ route('admin.countries.index') }}"
+                               class="nav-link @if(request()->routeIs('admin.countries.*')) active @endif">
+                                <i class="ph-globe"></i>
+                                <span>{{ __('Countries') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('region-index')
+                        <li class="nav-item">
+                            <a href="{{ route('admin.regions.index') }}"
+                               class="nav-link @if(request()->routeIs('admin.regions.*')) active @endif">
+                                <i class="ph-map-pin"></i>
+                                <span>{{ __('Regions') }}</span>
                             </a>
                         </li>
                     @endcan

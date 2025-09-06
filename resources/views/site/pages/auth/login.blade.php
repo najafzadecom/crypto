@@ -4,7 +4,7 @@
     <main class="nk-pages nk-pages-centered bg-theme">
         <div class="ath-container">
             <div class="ath-header text-center">
-                <a href="{{ route('home') }}" class="ath-logo">
+                <a href="{{ localizedRoute('home') }}" class="ath-logo">
                     <img
                         src="{{ asset('site/assets/images/logo-full-white.png') }}"
                         srcset="{{ asset('site/assets/images/logo-full-white2x.png') }} 2x"
@@ -14,7 +14,7 @@
             </div>
             <div class="ath-body">
                 <h5 class="ath-heading title">{{ __('Sign in') }} <small class="tc-default">{{ __('with your account') }}</small></h5>
-                <form action="{{ route('login') }}" method="POST">
+                <form action="{{ localizedRoute('login') }}" method="POST">
                     @csrf
                     <div class="field-item">
                         <div class="field-wrap">
@@ -31,7 +31,7 @@
                             <input class="input-checkbox" id="remember-me-2" type="checkbox">
                             <label for="remember-me-2">{{ __('Remember Me') }}</label>
                         </div>
-                        <div class="forget-link fz-6"><a href="{{ route('password.request') }}">{{ __('Forgot password?') }}</a></div>
+                        <div class="forget-link fz-6"><a href="{{ localizedRoute('password.request') }}">{{ __('Forgot password?') }}</a></div>
                     </div>
                     <button class="btn btn-primary btn-block btn-md">{{ __('Sign In') }}</button>
                 </form>
@@ -47,7 +47,7 @@
             </div>
             <div class="ath-note text-center tc-light">
                 {{ __('Don’t have an account?') }}
-                <a href="{{ route('register') }}"> <strong>{{ __('Sign up here') }}</strong></a>
+                <a href="{{ localizedRoute('register') }}"> <strong>{{ __('Sign up here') }}</strong></a>
             </div>
         </div>
     </main>

@@ -70,3 +70,41 @@ if (!function_exists('getSiteDescription')) {
         return setting('site_description', 'İdarəetmə paneli');
     }
 }
+
+if (!function_exists('localizedRoute')) {
+    /**
+     * Generate a localized route URL
+     */
+    function localizedRoute(string $name, array $parameters = [], bool $absolute = true): string
+    {
+        // Get current locale
+        $locale = app()->getLocale();
+        
+        // Add locale to parameters if not already present
+        if (!isset($parameters['locale'])) {
+            $parameters['locale'] = $locale;
+        }
+        
+        return route($name, $parameters, $absolute);
+    }
+}
+
+if (!function_exists('currentLocale')) {
+    /**
+     * Get current locale
+     */
+    function currentLocale(): string
+    {
+        return app()->getLocale();
+    }
+}
+
+if (!function_exists('routeWithLocale')) {
+    /**
+     * Generate route with current locale (alias for localizedRoute)
+     */
+    function routeWithLocale(string $name, array $parameters = [], bool $absolute = true): string
+    {
+        return localizedRoute($name, $parameters, $absolute);
+    }
+}

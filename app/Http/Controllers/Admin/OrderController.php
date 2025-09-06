@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Store\OrderRequest as StoreRequest;
 use App\Http\Requests\Update\OrderRequest as UpdateRequest;
 use App\Services\OrderService as Service;
 use App\Services\UserService;
 use App\Services\PackageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class OrderController extends BaseController
 {
@@ -18,10 +18,9 @@ class OrderController extends BaseController
 
     public function __construct(Service $service, UserService $userService, PackageService $packageService)
     {
-        $this->middleware('permission:orders-index|orders-create|orders-edit', ['only' => ['index']]);
-        $this->middleware('permission:orders-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:orders-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:orders-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:order-index|order-edit', ['only' => ['index']]);
+        $this->middleware('permission:order-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->userService = $userService;
@@ -29,7 +28,7 @@ class OrderController extends BaseController
         $this->module = 'orders';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Orders'),
@@ -40,30 +39,10 @@ class OrderController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
-    {
-        $this->data = [
-            'title' => __('Create Order'),
-            'method' => 'POST',
-            'action' => route('admin.' . $this->module . '.store'),
-            'users' => $this->userService->getAll(),
-            'packages' => $this->packageService->getAll()
-        ];
-
-        return $this->render('form');
-    }
-
-    public function store(StoreRequest $request)
-    {
-        $item = $this->service->create($request->validated());
-
-        return $this->redirectSuccess('admin.orders.index');
-    }
-
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'order_number' => $item->order_number,
@@ -89,10 +68,10 @@ class OrderController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit Order'),
             'item' => $item,
@@ -120,7 +99,7 @@ class OrderController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

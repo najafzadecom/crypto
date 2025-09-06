@@ -12,7 +12,7 @@ class PageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->can('page-edit');
     }
 
     /**
@@ -23,12 +23,12 @@ class PageRequest extends FormRequest
     public function rules(): array
     {
         $pageId = $this->route('page');
-        
+
         return [
             // Main page fields
             'template' => 'required|string|max:255',
             'status' => 'boolean',
-            
+
             // Translation fields
             'translations' => 'required|array|min:1',
             'translations.*.locale' => 'required|string|in:az,en,tr',

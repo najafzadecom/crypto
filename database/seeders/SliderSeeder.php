@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Slider;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,8 @@ class SliderSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Slider::factory(10)->create();
+
+        $this->command->info('Sliders seeded successfully!');
     }
 }

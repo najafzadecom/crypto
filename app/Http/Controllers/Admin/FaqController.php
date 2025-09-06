@@ -8,6 +8,7 @@ use App\Services\FaqService as Service;
 use App\Services\LanguageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class FaqController extends BaseController
 {
@@ -16,17 +17,17 @@ class FaqController extends BaseController
 
     public function __construct(Service $service, LanguageService $languageService)
     {
-        $this->middleware('permission:faqs-index|faqs-create|faqs-edit', ['only' => ['index']]);
-        $this->middleware('permission:faqs-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:faqs-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:faqs-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:faq-index|faq-create|faq-edit', ['only' => ['index']]);
+        $this->middleware('permission:faq-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:faq-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:faq-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->languageService = $languageService;
         $this->module = 'faqs';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('FAQs'),
@@ -38,7 +39,7 @@ class FaqController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create FAQ'),
@@ -50,17 +51,17 @@ class FaqController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.faqs.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'status' => $item->status,
@@ -73,10 +74,10 @@ class FaqController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit FAQ'),
             'item' => $item,
@@ -103,7 +104,7 @@ class FaqController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

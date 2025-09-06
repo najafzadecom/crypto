@@ -9,6 +9,7 @@ use App\Services\LanguageService;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class NewsController extends BaseController
 {
@@ -29,7 +30,7 @@ class NewsController extends BaseController
         $this->module = 'news';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('News'),
@@ -41,7 +42,7 @@ class NewsController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create News'),
@@ -54,17 +55,17 @@ class NewsController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.news.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'image' => $item->image,
@@ -78,10 +79,10 @@ class NewsController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit News'),
             'item' => $item,
@@ -109,7 +110,7 @@ class NewsController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

@@ -9,7 +9,7 @@ class UserRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->can('user-edit');
     }
 
     /**
@@ -25,7 +25,9 @@ class UserRequest extends FormRequest
             'username' => 'required|unique:users,username,' . $this->route('user'),
             'password' => 'nullable|min:8|confirmed',
             'roles' => 'array',
-            'telegram' => 'nullable'
+            'telegram' => 'nullable',
+            'status' => 'boolean',
+            'permissions.*' => 'exists:permissions,id'
         ];
     }
 }

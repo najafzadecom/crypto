@@ -24,6 +24,11 @@ class Role extends \Spatie\Permission\Models\Role
     use HasFactory, SoftDeletes, Sortable, HasStatusHtml, LogsActivity;
 
     protected $guarded = [];
+    
+    protected $casts = [
+        'status' => 'boolean',
+        'protected' => 'boolean',
+    ];
 
     protected $appends = ['coloredName'];
 

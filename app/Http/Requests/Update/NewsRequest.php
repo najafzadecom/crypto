@@ -12,7 +12,7 @@ class NewsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->can('news-edit');
     }
 
     /**
@@ -23,7 +23,7 @@ class NewsRequest extends FormRequest
     public function rules(): array
     {
         $newsId = $this->route('news');
-        
+
         return [
             // Main news fields
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -32,7 +32,7 @@ class NewsRequest extends FormRequest
             'status' => 'boolean',
             'category_ids' => 'nullable|array',
             'category_ids.*' => 'exists:categories,id',
-            
+
             // Translation fields
             'translations' => 'required|array',
             'translations.*.locale' => 'required|string|in:az,en,tr',

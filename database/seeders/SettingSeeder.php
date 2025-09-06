@@ -185,5 +185,7 @@ class SettingSeeder extends Seeder
                 $setting
             );
         }
+
+        $this->command->info('Settings seeded successfully!');
     }
 }

@@ -2,34 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Store\TransactionRequest as StoreRequest;
-use App\Http\Requests\Update\TransactionRequest as UpdateRequest;
 use App\Services\TransactionService as Service;
 use App\Services\UserService;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TransactionController extends BaseController
 {
     private Service $service;
-    private UserService $userService;
-    private OrderService $orderService;
 
-    public function __construct(Service $service, UserService $userService, OrderService $orderService)
+    public function __construct(Service $service)
     {
-        $this->middleware('permission:transactions-index|transactions-create|transactions-edit', ['only' => ['index']]);
-        $this->middleware('permission:transactions-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:transactions-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:transactions-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:transaction-index', ['only' => ['index']]);
+        $this->middleware('permission:transaction-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
-        $this->userService = $userService;
-        $this->orderService = $orderService;
         $this->module = 'transactions';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Transactions'),
@@ -40,30 +33,10 @@ class TransactionController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
-    {
-        $this->data = [
-            'title' => __('Create Transaction'),
-            'method' => 'POST',
-            'action' => route('admin.' . $this->module . '.store'),
-            'users' => $this->userService->getAll(),
-            'orders' => $this->orderService->getAll()
-        ];
-
-        return $this->render('form');
-    }
-
-    public function store(StoreRequest $request)
-    {
-        $item = $this->service->create($request->validated());
-
-        return $this->redirectSuccess('admin.transactions.index');
-    }
-
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'transaction_id' => $item->transaction_id,
@@ -88,29 +61,6 @@ class TransactionController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
-    {
-        $item = $this->service->getById($id);
-        
-        $this->data = [
-            'title' => __('Edit Transaction'),
-            'item' => $item,
-            'method' => 'PUT',
-            'action' => route('admin.' . $this->module . '.update', $id),
-            'users' => $this->userService->getAll(),
-            'orders' => $this->orderService->getAll()
-        ];
-
-        return $this->render('form');
-    }
-
-    public function update(UpdateRequest $request, string $id): RedirectResponse
-    {
-        $this->service->update($id, $request->validated());
-
-        return $this->redirectSuccess('admin.transactions.index');
-    }
-
     public function destroy(string $id): JsonResponse
     {
         // Check if delete confirmation was received
@@ -119,7 +69,7 @@ class TransactionController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('location')->unique(); // header, footer, sidebar etc.
             $table->boolean('status')->default(0);
             $table->timestamps();

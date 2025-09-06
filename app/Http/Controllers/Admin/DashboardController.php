@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\View\View;
+
 class DashboardController extends BaseController
 {
 
@@ -10,7 +12,7 @@ class DashboardController extends BaseController
         $this->module = 'dashboard';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Admin'),

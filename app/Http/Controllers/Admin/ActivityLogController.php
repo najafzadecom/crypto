@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Services\ActivityLogService as Service;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class ActivityLogController extends BaseController
 {
@@ -13,13 +14,13 @@ class ActivityLogController extends BaseController
         Service $service
     )
     {
-        $this->middleware('permission:activity-logs-index', ['only' => ['index']]);
+        $this->middleware('permission:activity-log-index', ['only' => ['index']]);
 
         $this->service = $service;
         $this->module = 'activity-logs';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Activity Logs'),

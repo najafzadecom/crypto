@@ -3,7 +3,7 @@
         <div class="container container-xxl">
             <div class="header-wrap">
                 <div class="header-logo logo animated" data-animate="fadeInDown" data-delay=".65">
-                    <a href="{{ route('home') }}" class="logo-link">
+                    <a href="{{ localizedRoute('home') }}" class="logo-link">
                         <img
                             class="logo-dark"
                             src="{{ asset('site/assets/images/logo.png') }}"
@@ -46,12 +46,12 @@
                         @endif
                         <ul class="menu-btns">
                             <li>
-                                <a href="{{ route('register') }}" class="btn btn-md btn-auto btn-secondary btn-outline no-change">
+                                <a href="{{ localizedRoute('register') }}" class="btn btn-md btn-auto btn-secondary btn-outline no-change">
                                     <span>{{ __('Sign Up') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('login') }}" class="btn btn-md btn-auto btn-secondary no-change focus">
+                                <a href="{{ localizedRoute('login') }}" class="btn btn-md btn-auto btn-secondary no-change focus">
                                     <span>{{ __('Login') }}</span>
                                 </a>
                             </li>

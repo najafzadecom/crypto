@@ -42,6 +42,26 @@
                     </div>
 
                     <div class="row mb-3">
+                        <label class="col-lg-3 col-form-label">{{ __('Locale') }}:</label>
+                        <div class="col-lg-9">
+                            <input
+                                type="text"
+                                name="locale"
+                                class="form-control @error('locale') is-invalid @enderror"
+                                placeholder="{{ __('Language locale (e.g., az_AZ, en_US)') }}"
+                                value="{{ old('locale', $item->locale ?? '') }}"
+                                maxlength="10"
+                            />
+                            <div class="form-text">{{ __('Enter a unique language locale (maximum 10 characters)') }}</div>
+                            @error('locale')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <label class="col-lg-3 col-form-label">{{ __('Name') }}:</label>
                         <div class="col-lg-9">
                             <input
@@ -57,6 +77,32 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-lg-3 col-form-label">{{ __('Flag') }}:</label>
+                        <div class="col-lg-9">
+                            <select name="flag" class="form-control @error('flag') is-invalid @enderror">
+                                <option value="">{{ __('Select flag') }}</option>
+                                @foreach($flagIcons as $file => $name)
+                                    <option value="{{ $file }}" {{ old('flag', $item->flag ?? '') == $file ? 'selected' : '' }}>{{ __(ucfirst($name)) }}</option>
+                                @endforeach
+                            </select>
+                            <div class="form-text">{{ __('Select a flag icon for the language') }}</div>
+                            @error('flag')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                            <div class="mt-2">
+                                <div id="flag-preview" class="d-flex align-items-center">
+                                    @if(isset($item) && $item->flag)
+                                        <img src="{{ asset('admin/assets/images/lang/' . $item->flag) }}" alt="{{ $item->name }}" height="20" class="me-2">
+                                        <span>{{ $item->flag }}</span>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -121,16 +167,45 @@
             $('input[name="code"]').on('input', function() {
                 this.value = this.value.toLowerCase().replace(/[^a-z0-9]/g, '');
             });
+            
+            // Locale sahəsini avtomatik olaraq düzgün formata çevir
+            $('input[name="locale"]').on('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+            });
+            
+            // Bayraq önizləməsini göstər
+            $('select[name="flag"]').on('change', function() {
+                var flagValue = $(this).val();
+                var flagPreview = $('#flag-preview');
+                
+                if (flagValue) {
+                    var flagUrl = '{{ asset("admin/assets/images/lang") }}/' + flagValue;
+                    flagPreview.html('<img src="' + flagUrl + '" alt="Flag" height="20" class="me-2"><span>' + flagValue + '</span>');
+                } else {
+                    flagPreview.html('');
+                }
+            });
+            
+            // İlk yükləmədə bayraq seçilmişsə önizləməsini göstər
+            $('select[name="flag"]').trigger('change');
 
             // Form validation
             $('form').on('submit', function(e) {
                 var code = $('input[name="code"]').val();
+                var locale = $('input[name="locale"]').val();
                 var name = $('input[name="name"]').val();
 
                 if (!code.trim()) {
                     e.preventDefault();
                     alert('{{ __("Language code is required") }}');
                     $('input[name="code"]').focus();
+                    return false;
+                }
+                
+                if (!locale.trim()) {
+                    e.preventDefault();
+                    alert('{{ __("Language locale is required") }}');
+                    $('input[name="locale"]').focus();
                     return false;
                 }
 
@@ -145,6 +220,13 @@
                     e.preventDefault();
                     alert('{{ __("Language code cannot be longer than 10 characters") }}');
                     $('input[name="code"]').focus();
+                    return false;
+                }
+                
+                if (locale.length > 10) {
+                    e.preventDefault();
+                    alert('{{ __("Language locale cannot be longer than 10 characters") }}');
+                    $('input[name="locale"]').focus();
                     return false;
                 }
             });

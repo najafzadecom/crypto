@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
             $table->string('color')->nullable(); // For MyISAM use string('guard_name', 25);
             $table->boolean('status')->default(false);
+            $table->boolean('protected')->default(false);
             $table->timestamps();
             $table->softDeletes();
             if ($teams || config('permission.testing')) {

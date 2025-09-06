@@ -8,6 +8,7 @@ use App\Services\MenuItemService as Service;
 use App\Services\LanguageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class MenuItemController extends BaseController
 {
@@ -16,17 +17,17 @@ class MenuItemController extends BaseController
 
     public function __construct(Service $service, LanguageService $languageService)
     {
-        $this->middleware('permission:menu-items-index|menu-items-create|menu-items-edit', ['only' => ['index']]);
-        $this->middleware('permission:menu-items-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:menu-items-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:menu-items-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:menu-item-index|menu-item-create|menu-item-edit', ['only' => ['index']]);
+        $this->middleware('permission:menu-item-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:menu-item-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:menu-item-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->languageService = $languageService;
         $this->module = 'menu-items';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Menu Items'),
@@ -38,7 +39,7 @@ class MenuItemController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create Menu Item'),
@@ -50,17 +51,17 @@ class MenuItemController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.menu-items.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'menu_id' => $item->menu_id,
@@ -77,10 +78,10 @@ class MenuItemController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit Menu Item'),
             'item' => $item,
@@ -107,7 +108,7 @@ class MenuItemController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

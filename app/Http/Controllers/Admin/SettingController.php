@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Store\SettingRequest as StoreRequest;
 use App\Http\Requests\Update\SettingRequest as UpdateRequest;
 use App\Services\SettingService as Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SettingController extends BaseController
 {
@@ -14,8 +14,8 @@ class SettingController extends BaseController
 
     public function __construct(Service $service)
     {
-        $this->middleware('permission:settings-index|settings-edit', ['only' => ['index']]);
-        $this->middleware('permission:settings-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:setting-index|setting-edit', ['only' => ['index']]);
+        $this->middleware('permission:setting-edit', ['only' => ['edit', 'update']]);
 
         $this->service = $service;
         $this->module = 'settings';
@@ -24,7 +24,7 @@ class SettingController extends BaseController
     /**
      * Show settings in tab format
      */
-    public function index()
+    public function index(): View
     {
         $settings = $this->service->getAll();
         $settingsByGroup = $settings->groupBy('group');
@@ -41,7 +41,7 @@ class SettingController extends BaseController
         return $this->render('index');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -153,15 +153,11 @@ class SettingController extends BaseController
      */
     private function convertValue($value, string $type)
     {
-        switch ($type) {
-            case 'boolean':
-                return (bool) $value;
-            case 'number':
-                return is_numeric($value) ? (float) $value : $value;
-            case 'json':
-                return is_string($value) ? json_decode($value, true) : $value;
-            default:
-                return $value;
-        }
+        return match ($type) {
+            'boolean' => (bool)$value,
+            'number' => is_numeric($value) ? (float)$value : $value,
+            'json' => is_string($value) ? json_decode($value, true) : $value,
+            default => $value,
+        };
     }
 }

@@ -243,7 +243,7 @@
                             </div>
                         </div>
                         <div class="text-center pt-3 animated" data-animate="fadeInUp" data-delay="0.5">
-                            <a href="{{ route('register') }}" class="btn btn-lg btn-secondary">create an account</a>
+                            <a href="{{ localizedRoute('register') }}" class="btn btn-lg btn-secondary">create an account</a>
                         </div>
                     </div>
                 </div>

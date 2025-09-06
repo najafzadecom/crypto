@@ -116,20 +116,25 @@
                                     $groupedPermissions[$group][] = $permission;
                                 }
 
-                                // Qrup adlarını tərcümə etmək üçün mapping
                                 $groupNames = [
-                                    'accounts' => __('Accounts'),
-                                    'users' => __('Users'),
-                                    'roles' => __('Roles'),
-                                    'permissions' => __('Permissions'),
-                                    'merchants' => __('Merchants'),
-                                    'wallets' => __('Wallets'),
-                                    'transactions' => __('Transactions'),
-                                    'providers' => __('Providers'),
-                                    'banks' => __('Banks'),
-                                    'withdrawals' => __('Withdrawals'),
-                                    'activity-logs' => __('Activity Logs'),
-                                    'other' => __('Other')
+                                    'activity' => __('Activity Logs'),
+                                    'category' => __('Categories'),
+                                    'faq' => __('Faq'),
+                                    'language' => __('Languages'),
+                                    'menu' => __('Menus'),
+                                    'menu-item' => __('Menu items'),
+                                    'news' => __('News'),
+                                    'order' => __('Orders'),
+                                    'package' => __('Packages'),
+                                    'page' => __('Pages'),
+                                    'permission' => __('Permissions'),
+                                    'role' => __('Roles'),
+                                    'setting' => __('Settings'),
+                                    'slider' => __('Sliders'),
+                                    'static' => __('Static Blocks'),
+                                    'testimonial' => __('Testimonials'),
+                                    'transaction' => __('Transactions'),
+                                    'user' => __('Users')
                                 ];
                             @endphp
 

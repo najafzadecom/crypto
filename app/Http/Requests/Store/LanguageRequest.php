@@ -12,7 +12,7 @@ class LanguageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->can('language-create');
     }
 
     /**
@@ -24,7 +24,9 @@ class LanguageRequest extends FormRequest
     {
         return [
             'code' => 'required|string|max:10|unique:languages,code',
+            'locale' => 'required|string|max:10|unique:languages,locale',
             'name' => 'required|string|max:255',
+            'flag' => 'nullable|string|max:255',
             'status' => 'boolean',
         ];
     }

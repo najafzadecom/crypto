@@ -12,7 +12,7 @@ class LanguageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->can('language-edit');
     }
 
     /**
@@ -26,7 +26,9 @@ class LanguageRequest extends FormRequest
 
         return [
             'code' => 'required|string|max:10|unique:languages,code,' . $languageId,
+            'locale' => 'required|string|max:10|unique:languages,locale,' . $languageId,
             'name' => 'required|string|max:255',
+            'flag' => 'nullable|string|max:255',
             'status' => 'boolean',
         ];
     }

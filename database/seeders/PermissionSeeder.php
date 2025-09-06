@@ -13,49 +13,48 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Sistem controllerlərində istifadə olunan bütün permissionlar
         $permissions = [
             // User permissions
-            'users-index',
-            'users-create',
-            'users-edit',
-            'users-delete',
-            'users-show',
+            'user-index',
+            'user-create',
+            'user-edit',
+            'user-delete',
+            'user-show',
 
             // Role permissions
-            'roles-index',
-            'roles-create',
-            'roles-edit',
-            'roles-delete',
-            'roles-show',
+            'role-index',
+            'role-create',
+            'role-edit',
+            'role-delete',
+            'role-show',
 
             // Permission permissions
-            'permissions-index',
-            'permissions-create',
-            'permissions-edit',
-            'permissions-delete',
-            'permissions-show',
+            'permission-index',
+            'permission-create',
+            'permission-edit',
+            'permission-delete',
+            'permission-show',
 
             // Language permissions
-            'languages-index',
-            'languages-create',
-            'languages-edit',
-            'languages-delete',
-            'languages-show',
+            'language-index',
+            'language-create',
+            'language-edit',
+            'language-delete',
+            'language-show',
 
             // Category permissions
-            'categories-index',
-            'categories-create',
-            'categories-edit',
-            'categories-delete',
-            'categories-show',
+            'category-index',
+            'category-create',
+            'category-edit',
+            'category-delete',
+            'category-show',
 
             // FAQ permissions
-            'faqs-index',
-            'faqs-create',
-            'faqs-edit',
-            'faqs-delete',
-            'faqs-show',
+            'faq-index',
+            'faq-create',
+            'faq-edit',
+            'faq-delete',
+            'faq-show',
 
             // News permissions
             'news-index',
@@ -65,75 +64,99 @@ class PermissionSeeder extends Seeder
             'news-show',
 
             // Page permissions
-            'pages-index',
-            'pages-create',
-            'pages-edit',
-            'pages-delete',
-            'pages-show',
+            'page-index',
+            'page-create',
+            'page-edit',
+            'page-delete',
+            'page-show',
 
             // Menu permissions
-            'menus-index',
-            'menus-create',
-            'menus-edit',
-            'menus-delete',
-            'menus-show',
+            'menu-index',
+            'menu-create',
+            'menu-edit',
+            'menu-delete',
+            'menu-show',
 
             // Menu Item permissions
-            'menu-items-index',
-            'menu-items-create',
-            'menu-items-edit',
-            'menu-items-delete',
-            'menu-items-show',
+            'menu-item-index',
+            'menu-item-create',
+            'menu-item-edit',
+            'menu-item-delete',
+            'menu-item-show',
 
             // Slider permissions
-            'sliders-index',
-            'sliders-create',
-            'sliders-edit',
-            'sliders-delete',
-            'sliders-show',
+            'slider-index',
+            'slider-create',
+            'slider-edit',
+            'slider-delete',
+            'slider-show',
 
             // Static Block permissions
-            'static-blocks-index',
-            'static-blocks-create',
-            'static-blocks-edit',
-            'static-blocks-delete',
-            'static-blocks-show',
+            'static-block-index',
+            'static-block-create',
+            'static-block-edit',
+            'static-block-delete',
+            'static-block-show',
 
             // Testimonial permissions
-            'testimonials-index',
-            'testimonials-create',
-            'testimonials-edit',
-            'testimonials-delete',
-            'testimonials-show',
+            'testimonial-index',
+            'testimonial-create',
+            'testimonial-edit',
+            'testimonial-delete',
+            'testimonial-show',
 
             // Package permissions
-            'packages-index',
-            'packages-create',
-            'packages-edit',
-            'packages-delete',
-            'packages-show',
+            'package-index',
+            'package-create',
+            'package-edit',
+            'package-delete',
+            'package-show',
 
             // Order permissions
-            'orders-index',
-            'orders-create',
-            'orders-edit',
-            'orders-delete',
-            'orders-show',
+            'order-index',
+            'order-edit',
+            'order-delete',
+            'order-show',
 
             // Transaction permissions
-            'transactions-index',
-            'transactions-create',
-            'transactions-edit',
-            'transactions-delete',
-            'transactions-show',
+            'transaction-index',
+            'transaction-show',
 
-            // Settings permissions (yalnız index və edit)
-            'settings-index',
-            'settings-edit',
+            // Settings permissions (only index and edit)
+            'setting-index',
+            'setting-edit',
 
-            // Activity Log permissions (yalnız index və show)
-            'activity-logs-index',
-            'activity-logs-show',
+            // Activity Log permissions (only index and show)
+            'activity-log-index',
+            'activity-log-show',
+
+            // Partner permissions
+            'partner-index',
+            'partner-create',
+            'partner-edit',
+            'partner-show',
+            'partner-delete',
+
+            // Currency permissions
+            'currency-index',
+            'currency-create',
+            'currency-edit',
+            'currency-show',
+            'currency-delete',
+            
+            // Country permissions
+            'country-index',
+            'country-create',
+            'country-edit',
+            'country-show',
+            'country-delete',
+            
+            // Region permissions
+            'region-index',
+            'region-create',
+            'region-edit',
+            'region-show',
+            'region-delete',
         ];
 
         foreach ($permissions as $permission) {
@@ -143,6 +166,6 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('Permissionlar uğurla yaradıldı!');
+        $this->command->info('All permissions seeded successfully.');
     }
 }

@@ -8,6 +8,7 @@ use App\Services\TestimonialService as Service;
 use App\Services\LanguageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TestimonialController extends BaseController
 {
@@ -16,17 +17,17 @@ class TestimonialController extends BaseController
 
     public function __construct(Service $service, LanguageService $languageService)
     {
-        $this->middleware('permission:testimonials-index|testimonials-create|testimonials-edit', ['only' => ['index']]);
-        $this->middleware('permission:testimonials-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:testimonials-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:testimonials-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:testimonial-index|testimonial-create|testimonial-edit', ['only' => ['index']]);
+        $this->middleware('permission:testimonial-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:testimonial-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:testimonial-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->languageService = $languageService;
         $this->module = 'testimonials';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Testimonials'),
@@ -38,7 +39,7 @@ class TestimonialController extends BaseController
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'title' => __('Create Testimonial'),
@@ -50,17 +51,17 @@ class TestimonialController extends BaseController
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.testimonials.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'id' => $item->id,
             'image' => $item->image,
@@ -75,10 +76,10 @@ class TestimonialController extends BaseController
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $item = $this->service->getById($id);
-        
+
         $this->data = [
             'title' => __('Edit Testimonial'),
             'item' => $item,
@@ -105,7 +106,7 @@ class TestimonialController extends BaseController
                 'message' => __('Delete confirmation required'),
                 'confirmed' => false
             ];
-            
+
             return $this->json(422);
         }
 

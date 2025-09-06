@@ -10,7 +10,7 @@
                             <div class="col-lg-6">
                                 <div class="contact-wrap round split split-left split-lg-left bg-white">
                                     <h5 class="title title-md">{{ __('Contact Us') }}</h5>
-                                    <form class="nk-form-submit" action="{{ route('contact') }}" method="post" novalidate="novalidate">
+                                    <form class="nk-form-submit" action="{{ localizedRoute('contact') }}" method="post" novalidate="novalidate">
                                         @csrf
                                         <div class="field-item">
                                             <input name="name" type="text" class="input-line required" aria-required="true">

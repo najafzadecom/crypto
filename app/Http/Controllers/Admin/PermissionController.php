@@ -7,6 +7,7 @@ use App\Http\Requests\Update\PermissionRequest as UpdateRequest;
 use App\Services\PermissionService as Service;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class PermissionController extends BaseController
 {
@@ -14,62 +15,62 @@ class PermissionController extends BaseController
 
     public function __construct(Service $service)
     {
-        $this->middleware('permission:permissions-index|permissions-create|permissions-edit', ['only' => ['index']]);
-        $this->middleware('permission:permissions-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:permissions-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:permissions-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:permission-index|permission-create|permission-edit', ['only' => ['index']]);
+        $this->middleware('permission:permission-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:permission-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
         $this->module = 'permissions';
     }
 
-    public function index()
+    public function index(): View
     {
         $this->data = [
             'module' => __('Permissions'),
             'title' => __('List'),
-            'items' => $this->service->paginate()
+            'items' => $this->service->paginate(),
         ];
 
         return $this->render('list');
     }
 
-    public function create()
+    public function create(): View
     {
         $this->data = [
             'module' => __('Permissions'),
             'title' => __('Create'),
             'method' => 'POST',
-            'action' => route('admin.' . $this->module . '.store')
+            'action' => route('admin.' . $this->module . '.store'),
         ];
 
         return $this->render('form');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $item = $this->service->create($request->validated());
 
         return $this->redirectSuccess('admin.permissions.index');
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $this->data = [
-            'item' => $this->service->getById($id)
+            'item' => $this->service->getById($id),
         ];
 
         return $this->json();
     }
 
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $this->data = [
             'module' => __('Permissions'),
             'title' => __('Edit'),
             'item' => $this->service->getById($id),
             'method' => 'PUT',
-            'action' => route('admin.' . $this->module . '.update', $id)
+            'action' => route('admin.' . $this->module . '.update', $id),
         ];
 
         return $this->render('form');
@@ -88,9 +89,9 @@ class PermissionController extends BaseController
         if (!request()->has('confirmed')) {
             $this->data = [
                 'message' => __('Delete confirmation required'),
-                'confirmed' => false
+                'confirmed' => false,
             ];
-            
+
             return $this->json(422);
         }
 
@@ -103,7 +104,7 @@ class PermissionController extends BaseController
         }
 
         $this->data = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return $this->json($code);
@@ -120,7 +121,7 @@ class PermissionController extends BaseController
         }
 
         $this->data = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return $this->json($code);
@@ -137,7 +138,7 @@ class PermissionController extends BaseController
         }
 
         $this->data = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return $this->json($code);
